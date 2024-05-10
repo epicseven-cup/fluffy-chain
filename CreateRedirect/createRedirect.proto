@@ -1,0 +1,23 @@
+syntax = "proto3";
+option go_package = "github.com/epicseven-cup/fluffy-chain/CreateRedirect";
+
+enum Timer {
+	start = 0;
+	end = 1;
+}
+
+message CreateRedirectRequest {
+	string source = 1;
+	string destation = 2;
+	Timer timer = 3;
+}
+
+message CreateRedirectRespond {
+	bool status = 1;
+	Timer timer = 2;
+}
+
+service CreateRedirectService {
+	rpc CreateRedirect(CreateRedirectRequest) returns (CreateRedirectRespond) {};
+}
+
