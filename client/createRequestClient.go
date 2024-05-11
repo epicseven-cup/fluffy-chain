@@ -8,9 +8,10 @@ import (
 )
 
 type CreateRequestClient struct {
+	pb.Un
 }
 
-func (createRequestClient *CreateRequestClient) NewCreateRedirectServiceClient() CreateRedirect.CreateRedirectServiceClient {
+func (createRequestClient *CreateRequestClient) NewCreateRedirectServiceClient(cc grpc.ClientConnInterface) CreateRedirect.CreateRedirectServiceClient {
 	return nil
 }
 

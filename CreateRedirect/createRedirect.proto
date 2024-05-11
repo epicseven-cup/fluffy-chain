@@ -14,7 +14,8 @@ message CreateRedirectRequest {
 
 message CreateRedirectRespond {
 	bool status = 1;
-	Timer timer = 2;
+	string message = 2;
+	option Timer timer = 3;
 }
 
 service CreateRedirectService {
