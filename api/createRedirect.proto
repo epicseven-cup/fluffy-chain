@@ -1,24 +1,24 @@
 syntax = "proto3";
+import "google/protobuf/timestamp.proto";
 option go_package = "github.com/epicseven-cup/fluffy-chain/CreateRedirect";
-
-enum Timer {
-	start = 0;
-	end = 1;
-}
 
 message CreateRedirectRequest {
 	string source = 1;
 	string destation = 2;
-	Timer timer = 3;
+	google.protobuf.Timestamp startTime = 3;
+	google.protobuf.Timestamp endTime = 4;
+	bool status = 5;
 }
 
 message CreateRedirectRespond {
-	bool status = 1;
-	string message = 2;
-	option Timer timer = 3;
+	string message = 1;
+	google.protobuf.Timestamp startTime = 2;
+	google.protobuf.Timestamp endTime = 3;
+	bool status = 4;
 }
 
 service CreateRedirectService {
 	rpc CreateRedirect(CreateRedirectRequest) returns (CreateRedirectRespond) {};
 }
 
+// check puff fodler

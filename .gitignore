@@ -6,6 +6,7 @@
 config.yml
 command_history.bash
 go.sum
+go.mod
 # Binaries for programs and plugins
 *.exe
 *.exe~
