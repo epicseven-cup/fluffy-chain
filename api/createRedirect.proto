@@ -17,15 +17,8 @@ message CreateRedirectRespond {
 	bool status = 4;
 }
 
-message RedirectRequest {
-	string path = 1;
-}
-
-message RedirectRespond {
-	string path = 1;
-}
-
-service RedirectService {
+service CreateRedirectService {
 	rpc CreateRedirect(CreateRedirectRequest) returns (CreateRedirectRespond) {};
-	rpc Redirect(RedirectRequest) returns (RedirectRespond) {};
 }
+
+// check puff fodler
