@@ -18,86 +18,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// CreateRedirectServiceClient is the client API for CreateRedirectService service.
+// RedirectServiceClient is the client API for RedirectService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CreateRedirectServiceClient interface {
+type RedirectServiceClient interface {
 	CreateRedirect(ctx context.Context, in *CreateRedirectRequest, opts ...grpc.CallOption) (*CreateRedirectRespond, error)
+	Redirect(ctx context.Context, in *RedirectRequest, opts ...grpc.CallOption) (*RedirectRespond, error)
 }
 
-type createRedirectServiceClient struct {
+type redirectServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCreateRedirectServiceClient(cc grpc.ClientConnInterface) CreateRedirectServiceClient {
-	return &createRedirectServiceClient{cc}
+func NewRedirectServiceClient(cc grpc.ClientConnInterface) RedirectServiceClient {
+	return &redirectServiceClient{cc}
 }
 
-func (c *createRedirectServiceClient) CreateRedirect(ctx context.Context, in *CreateRedirectRequest, opts ...grpc.CallOption) (*CreateRedirectRespond, error) {
+func (c *redirectServiceClient) CreateRedirect(ctx context.Context, in *CreateRedirectRequest, opts ...grpc.CallOption) (*CreateRedirectRespond, error) {
 	out := new(CreateRedirectRespond)
-	err := c.cc.Invoke(ctx, "/CreateRedirectService/CreateRedirect", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/RedirectService/CreateRedirect", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CreateRedirectServiceServer is the server API for CreateRedirectService service.
-// All implementations must embed UnimplementedCreateRedirectServiceServer
+func (c *redirectServiceClient) Redirect(ctx context.Context, in *RedirectRequest, opts ...grpc.CallOption) (*RedirectRespond, error) {
+	out := new(RedirectRespond)
+	err := c.cc.Invoke(ctx, "/RedirectService/Redirect", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// RedirectServiceServer is the server API for RedirectService service.
+// All implementations must embed UnimplementedRedirectServiceServer
 // for forward compatibility
-type CreateRedirectServiceServer interface {
+type RedirectServiceServer interface {
 	CreateRedirect(context.Context, *CreateRedirectRequest) (*CreateRedirectRespond, error)
-	mustEmbedUnimplementedCreateRedirectServiceServer()
+	Redirect(context.Context, *RedirectRequest) (*RedirectRespond, error)
+	mustEmbedUnimplementedRedirectServiceServer()
 }
 
-// UnimplementedCreateRedirectServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedCreateRedirectServiceServer struct {
+// UnimplementedRedirectServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedRedirectServiceServer struct {
 }
 
-func (UnimplementedCreateRedirectServiceServer) CreateRedirect(context.Context, *CreateRedirectRequest) (*CreateRedirectRespond, error) {
+func (UnimplementedRedirectServiceServer) CreateRedirect(context.Context, *CreateRedirectRequest) (*CreateRedirectRespond, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRedirect not implemented")
 }
-func (UnimplementedCreateRedirectServiceServer) mustEmbedUnimplementedCreateRedirectServiceServer() {}
+func (UnimplementedRedirectServiceServer) Redirect(context.Context, *RedirectRequest) (*RedirectRespond, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Redirect not implemented")
+}
+func (UnimplementedRedirectServiceServer) mustEmbedUnimplementedRedirectServiceServer() {}
 
-// UnsafeCreateRedirectServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CreateRedirectServiceServer will
+// UnsafeRedirectServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to RedirectServiceServer will
 // result in compilation errors.
-type UnsafeCreateRedirectServiceServer interface {
-	mustEmbedUnimplementedCreateRedirectServiceServer()
+type UnsafeRedirectServiceServer interface {
+	mustEmbedUnimplementedRedirectServiceServer()
 }
 
-func RegisterCreateRedirectServiceServer(s grpc.ServiceRegistrar, srv CreateRedirectServiceServer) {
-	s.RegisterService(&CreateRedirectService_ServiceDesc, srv)
+func RegisterRedirectServiceServer(s grpc.ServiceRegistrar, srv RedirectServiceServer) {
+	s.RegisterService(&RedirectService_ServiceDesc, srv)
 }
 
-func _CreateRedirectService_CreateRedirect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _RedirectService_CreateRedirect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateRedirectRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CreateRedirectServiceServer).CreateRedirect(ctx, in)
+		return srv.(RedirectServiceServer).CreateRedirect(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/CreateRedirectService/CreateRedirect",
+		FullMethod: "/RedirectService/CreateRedirect",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CreateRedirectServiceServer).CreateRedirect(ctx, req.(*CreateRedirectRequest))
+		return srv.(RedirectServiceServer).CreateRedirect(ctx, req.(*CreateRedirectRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CreateRedirectService_ServiceDesc is the grpc.ServiceDesc for CreateRedirectService service.
+func _RedirectService_Redirect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RedirectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RedirectServiceServer).Redirect(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/RedirectService/Redirect",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RedirectServiceServer).Redirect(ctx, req.(*RedirectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// RedirectService_ServiceDesc is the grpc.ServiceDesc for RedirectService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CreateRedirectService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "CreateRedirectService",
-	HandlerType: (*CreateRedirectServiceServer)(nil),
+var RedirectService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "RedirectService",
+	HandlerType: (*RedirectServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateRedirect",
-			Handler:    _CreateRedirectService_CreateRedirect_Handler,
+			Handler:    _RedirectService_CreateRedirect_Handler,
+		},
+		{
+			MethodName: "Redirect",
+			Handler:    _RedirectService_Redirect_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
