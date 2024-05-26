@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	uri     = ""
-	logPath = ""
+	uri     = "mongodb://database:27017"
+	logPath = "./server/log/server-log"
 )
 
 type RedirectServer struct {
@@ -70,7 +70,7 @@ func (redirectServer *RedirectServer) reidrect(ctx context.Context, in *pb.Redir
 	var result pb.CreateRedirectRequest
 	// Select on the url or request a default locaiton
 	redirectPath := in.GetPath()
-	query := bson.D{Key: "source", Value: redirectPath}
+	query := bson.D{{Key: "source", Value: redirectPath}}
 	err = cursor.FindOne(context.TODO(), query).Decode(&result)
 	if err != nil {
 		redirectServer.logger.Fatal(err)

@@ -1,0 +1,11 @@
+version: 1
+service:
+  logPath: "./log/service-log"
+  port: 8080
+
+server:
+  mongoDBUri: "mongodb://database:27017"
+  logPath: "./server/log/server-log"
+
+client:
+  address: "localhost:8081"

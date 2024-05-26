@@ -14,16 +14,13 @@ import (
 // methods for client
 
 const (
-	addr      = ""
-	source    = ""
-	destation = ""
-	status    = true
+	addr = "localhost"
 )
 
-func SendCreateRequest(startTime *timestamppb.Timestamp, endTime *timestamppb.Timestamp) {
+func SendCreateRequest(source string, destation string, startTime *timestamppb.Timestamp, endTime *timestamppb.Timestamp, status bool) (*pb.CreateRedirectRespond, error) {
 	cred := insecure.NewCredentials()
 	grpcCred := grpc.WithTransportCredentials(cred)
-	conn, err := grpc.Dial(addr, grpcCred)
+	conn, err := grpc.NewClient(addr, grpcCred)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -40,12 +37,13 @@ func SendCreateRequest(startTime *timestamppb.Timestamp, endTime *timestamppb.Ti
 		log.Fatalln(err)
 	}
 	log.Println(respond.GetMessage())
+	return respond, err
 }
 
 func SendRedirectRequest(requestPath string) {
 	cred := insecure.NewCredentials()
 	grpcCred := grpc.WithTransportCredentials(cred)
-	conn, err := grpc.Dial(addr, grpcCred)
+	conn, err := grpc.NewClient(addr, grpcCred)
 	if err != nil {
 		log.Fatalln(err)
 	}
