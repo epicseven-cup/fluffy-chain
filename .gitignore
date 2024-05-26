@@ -6,7 +6,7 @@
 config.yml
 command_history.bash
 
-go.sum
+# go.sum
 go.mod
 
 # Binaries for programs and plugins

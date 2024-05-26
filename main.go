@@ -1,53 +1,40 @@
 package fluffychain
 
 import (
-	"context"
+	"fmt"
 	"log"
 	"net"
+	"os"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"fluffychain/server"
+
+	pb "github.com/epicseven-cup/fluffy-chain/api"
+	"google.golang.org/grpc"
 )
 
 const (
-	DATABASE_URI = ""
-	LISTEN_PORT  = ""
-	LOG_PATH     = ""
+	PORT     = ""
+	LOG_PATH = ""
 )
 
-var cursor = createCursor()
-var logger = log.Default()
-
 func main() {
-	ln, err := net.Listen("tcp", LISTEN_PORT)
+	logFile, err := os.OpenFile(LOG_PATH, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
-		logger.Fatalln(err)
+		fmt.Println(err)
 	}
+	logger := log.Default()
+	logger.SetOutput(logFile)
 
-	for {
-		conn, err := ln.Accept()
-		if err != nil {
-			logger.Fatalln(err)
-		}
-		go requestHandle(conn)
-	}
-
-}
-
-func requestHandle(conn net.Conn) {
-	panic("unimplemented")
-
-}
-
-func createCursor() *mongo.Client {
-	logger.Println("Starting to create mongo client")
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(DATABASE_URI))
+	listener, err := net.Listen("tcp", PORT)
 
 	if err != nil {
 		logger.Fatalln(err)
 	}
 
-	logger.Println("Finish creating mongo client")
-
-	return client
+	s := grpc.NewServer()
+	pb.RegisterRedirectServiceServer(s, server.NewRedirectServer())
+	logger.Println("Service registered")
+	if err := s.Serve(listener); err != nil {
+		logger.Fatalln(err)
+	}
 }

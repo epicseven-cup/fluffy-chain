@@ -63,6 +63,5 @@ func SendRedirectRequest(requestPath string) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-
 	log.Println(respond.Path)
 }
