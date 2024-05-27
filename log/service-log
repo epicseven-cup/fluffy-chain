@@ -1,4 +1,7 @@
-2024/05/26 20:06:24 Starting up listener
-2024/05/26 20:06:24 Listener created
-2024/05/26 20:06:24 Starting up grpc server
-2024/05/26 20:06:24 grpc server started sucessfully
+2024/05/27 13:50:37 Starting up listener
+2024/05/27 13:50:37 Listener created
+2024/05/27 13:50:37 Starting up grpc server
+2024/05/27 13:50:37 127.0.0.1:8080
+2024/05/27 13:50:37 it hits here
+2024/05/27 13:50:37 server listening at 127.0.0.1:8080
+2024/05/27 13:50:37 grpc server started sucessfully

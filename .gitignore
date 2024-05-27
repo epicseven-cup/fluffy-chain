@@ -5,7 +5,7 @@
 .vscode/
 config.yml
 command_history.bash
-
+*/log/*
 # go.sum
 go.mod
 

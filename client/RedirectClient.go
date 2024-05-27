@@ -2,7 +2,9 @@ package client
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
 	"time"
 
 	pb "github.com/epicseven-cup/fluffy-chain/api"
@@ -14,29 +16,40 @@ import (
 // methods for client
 
 const (
-	addr = "localhost"
+	addr    = "localhost:8080"
+	logPath = "../client/log/client-log"
 )
 
 func SendCreateRequest(source string, destation string, startTime *timestamppb.Timestamp, endTime *timestamppb.Timestamp, status bool) (*pb.CreateRedirectRespond, error) {
+	logFile, err := os.OpenFile(logPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		fmt.Println(err)
+	}
+	logger := log.Default()
+	logger.SetOutput(logFile)
 	cred := insecure.NewCredentials()
 	grpcCred := grpc.WithTransportCredentials(cred)
 	conn, err := grpc.NewClient(addr, grpcCred)
+	logger.Println(conn.GetState().String())
+	logger.Println(conn)
 	if err != nil {
-		log.Fatalln(err)
+		logger.Fatalln(err)
 	}
 	defer conn.Close()
 
 	client := pb.NewRedirectServiceClient(conn)
+	logger.Println(client)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-
 	defer cancel()
 
 	request := pb.CreateRedirectRequest{Source: source, Destation: destation, StartTime: startTime, EndTime: endTime, Status: status}
+	logger.Println(request)
 	respond, err := client.CreateRedirect(ctx, &request)
 	if err != nil {
-		log.Fatalln(err)
+		logger.Println("There is an error when you get and respond")
+		logger.Fatalln(err)
 	}
-	log.Println(respond.GetMessage())
+	logger.Println(respond.GetMessage())
 	return respond, err
 }
 

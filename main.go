@@ -1,14 +1,14 @@
 package main
 
 import (
+	"fluffychain/server"
 	"fmt"
 	"log"
 	"net"
 	"os"
 
-	"fluffychain/server"
-
 	pb "github.com/epicseven-cup/fluffy-chain/api"
+
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 )
@@ -33,19 +33,18 @@ func main() {
 	logger := log.Default()
 	logger.SetOutput(logFile)
 	logger.Println("Starting up listener")
-	listener, err := net.Listen("tcp", PORT)
+	listener, err := net.Listen("tcp", "localhost:8080")
 	logger.Println("Listener created")
 	if err != nil {
 		logger.Fatalln(err)
 	}
 	logger.Println("Starting up grpc server")
 	s := grpc.NewServer()
+	logger.Println(listener.Addr())
+	logger.Println("it hits here")
+	logger.Printf("server listening at %v", listener.Addr())
 	logger.Println("grpc server started sucessfully")
 	pb.RegisterRedirectServiceServer(s, server.NewRedirectServer())
-	logger.Println("Service registered")
-	for {
-		if err := s.Serve(listener); err != nil {
-			logger.Fatalln(err)
-		}
-	}
+	// logger.Println("Service registered")
+	s.Serve(listener)
 }
