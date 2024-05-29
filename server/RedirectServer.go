@@ -42,6 +42,16 @@ func (redirectServer *RedirectServer) CreateRedirect(ctx context.Context, in *pb
 	cursor := client.Database("redirect").Collection("url")
 	redirectServer.logger.Println("Cursor is standardized correctly")
 	redirectServer.logger.Println("Starting to Insert new redirect url into the Mongo Database")
+
+	// Checks if this path already exist in the database
+	query := bson.D{{"destation", in.GetDestation()}}
+	err = cursor.FindOne(context.TODO(), query).Decode(nil)
+	if err != mongo.ErrNoDocuments {
+		// there is already a doc
+		redirectServer.logger.Fatalln(err)
+		return nil, nil
+	}
+
 	result, err := cursor.InsertOne(context.TODO(), in)
 	redirectServer.logger.Println("The cursor has inserted the new reidrect url here is the result: ", result)
 	status := true
@@ -57,7 +67,7 @@ func (redirectServer *RedirectServer) CreateRedirect(ctx context.Context, in *pb
 	return &respond, nil
 }
 
-func (redirectServer *RedirectServer) reidrect(ctx context.Context, in *pb.RedirectRequest) (*pb.RedirectRespond, error) {
+func (redirectServer *RedirectServer) Redirect(ctx context.Context, in *pb.RedirectRequest) (*pb.RedirectRespond, error) {
 	redirectServer.logger.Println("Starting a Redirect service")
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	redirectServer.logger.Println("Client is create successfuly")
